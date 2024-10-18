@@ -1,6 +1,10 @@
 package folder
 
-import "github.com/gofrs/uuid"
+import (
+	"strings"
+
+	"github.com/gofrs/uuid"
+)
 
 func GetAllFolders() []Folder {
 	return GetSampleData()
@@ -22,6 +26,16 @@ func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 
 func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) []Folder {
 	// Your code here...
+	allFolders := f.folders
 
-	return []Folder{}
+	childFolders := []Folder{}
+
+	for _, folder := range allFolders {
+		indexOfFirstFullStop := strings.Index(folder.Paths, ".")
+		if folder.Paths[0:indexOfFirstFullStop] == name {
+			childFolders = append(childFolders, folder)
+		}
+	}
+
+	return childFolders
 }
