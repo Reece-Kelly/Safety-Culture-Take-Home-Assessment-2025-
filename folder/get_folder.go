@@ -31,8 +31,7 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) []Folder {
 	childFolders := []Folder{}
 
 	for _, folder := range allFolders {
-		indexOfFirstFullStop := strings.Index(folder.Paths, ".")
-		if folder.Paths[0:indexOfFirstFullStop] == name {
+		if strings.Contains(folder.Paths, name) {
 			childFolders = append(childFolders, folder)
 		}
 	}
