@@ -1,6 +1,7 @@
 package folder_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/georgechieng-sc/interns-2022/folder"
@@ -31,12 +32,15 @@ func Test_folder_GetFoldersByOrgID(t *testing.T) {
 func Test_folder_GetAllChildFolders(t *testing.T) {
 	t.Parallel()
 	tests := [...]struct {
-		name    string
-		orgID   uuid.UUID
-		folders []folder.Folder
-		want    []folder.Folder
+		name      string
+		orgID     uuid.UUID
+		folders   []folder.Folder
+		want      []folder.Folder
+		wantError error
 	}{
 		// TODO: Add tests here
+
+		//Test to check that function does not include parent folder in output
 		{
 			name:  "clear-arclight",
 			orgID: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
@@ -59,6 +63,16 @@ func Test_folder_GetAllChildFolders(t *testing.T) {
 					Paths: "creative-scalphunter.clear-arclight.topical-micromax",
 				},
 			},
+			wantError: nil,
+		},
+
+		// Test to check if "empty name" error checking is working
+		{
+			name:      "",
+			orgID:     uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+			folders:   []folder.Folder{},
+			want:      []folder.Folder{},
+			wantError: errors.New("empty name"),
 		},
 	}
 	for _, tt := range tests {
