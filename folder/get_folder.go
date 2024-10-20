@@ -1,6 +1,7 @@
 package folder
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/gofrs/uuid"
@@ -24,17 +25,44 @@ func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 
 }
 
-func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) []Folder {
-	// Your code here...
+func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, error) {
+
+	// Check if name is empty
+	if name == "" {
+		return []Folder{}, errors.New("empty name") // Not too sure if this line is correct
+	}
+
+	if orgID == uuid.Nil {
+		return []Folder{}, errors.New("invalid orgID")
+	}
+
 	allFolders := f.folders
+
+	// Add error checking here to see if:
+	// - There is a folder with that name within the list of all folders
+	// - There is a folder with that name within the specified organisation
+	// - There are folders within the folders list (e.g. making sure it is not empty)
+
+	// Other TODO:
+	// Need to implement the error checking into the test function?
 
 	childFolders := []Folder{}
 
+	parentFolderExists := false
+
 	for _, folder := range allFolders {
-		if strings.Contains(folder.Paths, name) && folder.Name != name{
+		if folder.Name == name {
+			parentFolderExists = true
+		}
+
+		if strings.Contains(folder.Paths, name) && folder.Name != name {
 			childFolders = append(childFolders, folder)
 		}
 	}
 
-	return childFolders
+	if parentFolderExists == false {
+		return []Folder{}, errors.New("parent folder does not exist")
+	}
+
+	return childFolders, nil
 }
