@@ -74,6 +74,20 @@ func Test_folder_GetAllChildFolders(t *testing.T) {
 			want:      []folder.Folder{},
 			wantError: errors.New("empty name"),
 		},
+
+		{
+			name:      "invalid folder",
+			orgID:     uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+			folders:   []folder.Folder{
+				{
+					Name:  "clear-arclight",
+					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+					Paths: "creative-scalphunter.clear-arclight",
+				},
+			},
+			want:      []folder.Folder{},
+			wantError: errors.New("parent folder does not exist"),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
