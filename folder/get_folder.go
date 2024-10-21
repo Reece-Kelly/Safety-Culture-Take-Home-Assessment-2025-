@@ -60,7 +60,7 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 		}
 	}
 
-	if parentFolderExists == false {
+	if !parentFolderExists {
 		return []Folder{}, errors.New("parent folder does not exist")
 	}
 

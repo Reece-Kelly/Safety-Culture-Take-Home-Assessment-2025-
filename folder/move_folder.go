@@ -1,14 +1,19 @@
 package folder
 
 import (
+	"errors"
 	"strings"
 )
 
-func (f *driver) MoveFolder(name string, dst string) []Folder {
+func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 	// Your code here...
 	allFolders := f.folders
 
 	modifiedFolders := []Folder{}
+
+	if name == "" {
+		return []Folder{}, errors.New("empty name") // Not too sure if this line is correct
+	}
 
 	var destinationPath string = ""
 
@@ -36,5 +41,5 @@ func (f *driver) MoveFolder(name string, dst string) []Folder {
 		modifiedFolders = append(modifiedFolders, folder)
 	}
 
-	return modifiedFolders
+	return modifiedFolders, nil
 }
