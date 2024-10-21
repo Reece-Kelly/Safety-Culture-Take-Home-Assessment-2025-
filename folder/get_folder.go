@@ -51,8 +51,11 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 	parentFolderExists := false
 
 	for _, folder := range allFolders {
-		if folder.Name == name {
+		if folder.Name == name{
 			parentFolderExists = true
+			if folder.OrgId != orgID {
+				return []Folder{}, errors.New("parent folder does not exist in specified organization")
+			}
 		}
 
 		if strings.Contains(folder.Paths, name) && folder.Name != name {
