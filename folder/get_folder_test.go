@@ -11,6 +11,8 @@ import (
 
 // feel free to change how the unit test is structured
 func Test_folder_GetFoldersByOrgID(t *testing.T) {
+	sampleData := folder.GetSampleData()
+
 	t.Parallel()
 	tests := [...]struct {
 		name    string
@@ -18,13 +20,77 @@ func Test_folder_GetFoldersByOrgID(t *testing.T) {
 		folders []folder.Folder
 		want    []folder.Folder
 	}{
-		// TODO: your tests here
+
+		// Test to check method works with matching OrgID
+		{
+			name:    "Matching OrgID",
+			orgID:   uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+			folders: sampleData[0:3],
+			want: []folder.Folder{
+				{
+					Name:  "creative-scalphunter",
+					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+					Paths: "creative-scalphunter",
+				},
+				{
+					Name:  "clear-arclight",
+					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+					Paths: "creative-scalphunter.clear-arclight",
+				},
+				{
+					Name:  "topical-micromax",
+					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+					Paths: "creative-scalphunter.clear-arclight.topical-micromax",
+				},
+			},
+		},
+
+		// Test to check method works with non-matching orgID
+		{
+			name:    "Non-Matching OrgID",
+			orgID:   uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
+			folders: sampleData[0:3],
+			want:    []folder.Folder{},
+		},
+
+		// Test to check method works with
+		{
+			name:    "Multiple OrgIDs in input slice",
+			orgID:   uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
+			folders: append(sampleData[0:3], sampleData[79:82]...),
+			want: []folder.Folder{
+				{
+					Name:  "noble-vixen",
+					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
+					Paths: "noble-vixen",
+				},
+				{
+					Name:  "nearby-secret",
+					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
+					Paths: "noble-vixen.nearby-secret",
+				},
+				{
+					Name:  "magnetic-sinister-six",
+					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
+					Paths: "noble-vixen.nearby-secret.magnetic-sinister-six",
+				},
+			},
+		},
+
+		// Test to check method works with no folders in slice
+		{
+			name:    "No folders",
+			orgID:   uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
+			folders: []folder.Folder{},
+			want:    []folder.Folder{},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// f := folder.NewDriver(tt.folders)
-			// get := f.GetFoldersByOrgID(tt.orgID)
+			f := folder.NewDriver(tt.folders)
+			get := f.GetFoldersByOrgID(tt.orgID)
 
+			assert.Equal(t, tt.want, get)
 		})
 	}
 }
@@ -41,7 +107,7 @@ func Test_folder_GetAllChildFolders(t *testing.T) {
 		wantError error
 	}{
 
-		//Test to check that function does not include parent folder in output
+		//Test to check that method does not include parent folder in output
 		{
 			name:    "clear-arclight",
 			orgID:   uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
