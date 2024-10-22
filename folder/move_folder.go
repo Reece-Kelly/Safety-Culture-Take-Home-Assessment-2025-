@@ -12,7 +12,7 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 	modifiedFolders := []Folder{}
 
 	if name == "" {
-		return []Folder{}, errors.New("empty name") // Not too sure if this line is correct
+		return []Folder{}, errors.New("empty name")
 	}
 
 	var destinationPath string = ""

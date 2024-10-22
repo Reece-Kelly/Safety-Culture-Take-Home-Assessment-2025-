@@ -10,6 +10,8 @@ import (
 )
 
 func Test_folder_MoveFolder(t *testing.T) {
+	sampleData := folder.GetSampleData()
+
 	// TODO: your tests here
 	t.Parallel()
 	tests := [...]struct {
@@ -20,31 +22,12 @@ func Test_folder_MoveFolder(t *testing.T) {
 		wantError error
 	}{
 		// TODO: Add tests here
+
+		// Test to check that method works with imported data!!!
 		{
-			name: "nearby-secret",
-			dst:  "creatives-calphunter",
-			folders: []folder.Folder{
-				{
-					Name:  "creative-scalphunter",
-					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
-					Paths: "creative-scalphunter",
-				},
-				{
-					Name:  "noble-vixen",
-					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
-					Paths: "noble-vixen",
-				},
-				{
-					Name:  "nearby-secret",
-					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
-					Paths: "noble-vixen.nearby-secret",
-				},
-				{
-					Name:  "magnetic-sinister-six",
-					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
-					Paths: "noble-vixen.nearby-secret.magnetic-sinister-six",
-				},
-			},
+			name:    "topical-micromax",
+			dst:     "creative-scalphunter",
+			folders: sampleData[0:4],
 			want: []folder.Folder{
 				{
 					Name:  "creative-scalphunter",
@@ -52,19 +35,19 @@ func Test_folder_MoveFolder(t *testing.T) {
 					Paths: "creative-scalphunter",
 				},
 				{
-					Name:  "noble-vixen",
-					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
-					Paths: "noble-vixen",
+					Name:  "clear-arclight",
+					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+					Paths: "creative-scalphunter.clear-arclight",
 				},
 				{
-					Name:  "nearby-secret",
-					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
-					Paths: "creative-scalphunter.nearby-secret",
+					Name:  "topical-micromax",
+					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+					Paths: "creative-scalphunter.topical-micromax",
 				},
 				{
-					Name:  "magnetic-sinister-six",
-					OrgId: uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
-					Paths: "creative-scalphunter.nearby-secret.magnetic-sinister-six",
+					Name:  "bursting-lionheart",
+					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+					Paths: "creative-scalphunter.topical-micromax.bursting-lionheart",
 				},
 			},
 			wantError: nil,
@@ -72,9 +55,9 @@ func Test_folder_MoveFolder(t *testing.T) {
 
 		// Test to check error handling for error "cannot move a folder to child folder"
 		{
-			name:      "nearby-secret",
-			dst:       "creatives-calphunter",
-			folders:   []folder.Folder{},
+			name:      "clear-arclight",
+			dst:       "topical-micromax",
+			folders:   sampleData[0:4],
 			want:      []folder.Folder{},
 			wantError: errors.New("cannot move a folder to child folder"),
 		},
