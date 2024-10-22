@@ -26,10 +26,8 @@ func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 }
 
 func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, error) {
-
-	// Check if name is empty
 	if name == "" {
-		return []Folder{}, errors.New("empty name") // Not too sure if this line is correct
+		return []Folder{}, errors.New("empty name")
 	}
 
 	if orgID == uuid.Nil {
@@ -38,20 +36,12 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 
 	allFolders := f.folders
 
-	// Add error checking here to see if:
-	// - There is a folder with that name within the list of all folders
-	// - There is a folder with that name within the specified organisation
-	// - There are folders within the folders list (e.g. making sure it is not empty)
-
-	// Other TODO:
-	// Need to implement the error checking into the test function?
-
 	childFolders := []Folder{}
 
 	parentFolderExists := false
 
 	for _, folder := range allFolders {
-		if folder.Name == name{
+		if folder.Name == name {
 			parentFolderExists = true
 			if folder.OrgId != orgID {
 				return []Folder{}, errors.New("parent folder does not exist in specified organization")

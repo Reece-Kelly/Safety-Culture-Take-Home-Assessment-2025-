@@ -12,7 +12,6 @@ import (
 func Test_folder_MoveFolder(t *testing.T) {
 	sampleData := folder.GetSampleData()
 
-	// TODO: your tests here
 	t.Parallel()
 	tests := [...]struct {
 		name      string
@@ -21,8 +20,6 @@ func Test_folder_MoveFolder(t *testing.T) {
 		want      []folder.Folder
 		wantError error
 	}{
-		// TODO: Add tests here
-
 		// Test to check that method works with imported data
 		{
 			name:    "topical-micromax",
