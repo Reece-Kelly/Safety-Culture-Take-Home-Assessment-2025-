@@ -75,10 +75,11 @@ func Test_folder_GetAllChildFolders(t *testing.T) {
 			wantError: errors.New("empty name"),
 		},
 
+		// Test to check that "parent folder does not exist" error checking is working
 		{
-			name:      "invalid folder",
-			orgID:     uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
-			folders:   []folder.Folder{
+			name:  "invalid folder",
+			orgID: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),
+			folders: []folder.Folder{
 				{
 					Name:  "clear-arclight",
 					OrgId: uuid.Must(uuid.FromString("38b9879b-f73b-4b0e-b9d9-4fc4c23643a7")),

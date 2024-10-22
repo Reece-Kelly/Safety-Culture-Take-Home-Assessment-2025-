@@ -1,6 +1,7 @@
 package folder_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/georgechieng-sc/interns-2022/folder"
@@ -67,6 +68,15 @@ func Test_folder_MoveFolder(t *testing.T) {
 				},
 			},
 			wantError: nil,
+		},
+
+		// Test to check error handling for error "cannot move a folder to child folder"
+		{
+			name:      "nearby-secret",
+			dst:       "creatives-calphunter",
+			folders:   []folder.Folder{},
+			want:      []folder.Folder{},
+			wantError: errors.New("cannot move a folder to child folder"),
 		},
 	}
 	for _, tt := range tests {
