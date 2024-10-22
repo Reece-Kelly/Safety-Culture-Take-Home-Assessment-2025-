@@ -23,7 +23,7 @@ func Test_folder_MoveFolder(t *testing.T) {
 	}{
 		// TODO: Add tests here
 
-		// Test to check that method works with imported data!!!
+		// Test to check that method works with imported data
 		{
 			name:    "topical-micromax",
 			dst:     "creative-scalphunter",
@@ -53,6 +53,33 @@ func Test_folder_MoveFolder(t *testing.T) {
 			wantError: nil,
 		},
 
+		// Test to check error handling for error "empty name"
+		{
+			name:      "",
+			dst:       "topical-micromax",
+			folders:   sampleData[0:4],
+			want:      []folder.Folder{},
+			wantError: errors.New("empty name"),
+		},
+
+		// Test to check error handling for error "empty destination file"
+		{
+			name:      "topical-micromax",
+			dst:       "",
+			folders:   sampleData[0:4],
+			want:      []folder.Folder{},
+			wantError: errors.New("empty destination file"),
+		},
+
+		// Test to check error handling for error "destination folder not found"
+		{
+			name:      "clear-arclight",
+			dst:       "invalid-folder",
+			folders:   sampleData[0:4],
+			want:      []folder.Folder{},
+			wantError: errors.New("destination folder not found"),
+		},
+
 		// Test to check error handling for error "cannot move a folder to child folder"
 		{
 			name:      "clear-arclight",
@@ -60,6 +87,15 @@ func Test_folder_MoveFolder(t *testing.T) {
 			folders:   sampleData[0:4],
 			want:      []folder.Folder{},
 			wantError: errors.New("cannot move a folder to child folder"),
+		},
+
+		// Test to check error handling for error "cannot move a folder to different orgID"
+		{
+			name:      "bursting-lionheart",
+			dst:       "striking-black-panther",
+			folders:   sampleData[0:5],
+			want:      []folder.Folder{},
+			wantError: errors.New("cannot move a folder to different orgID"),
 		},
 	}
 	for _, tt := range tests {

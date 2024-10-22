@@ -3,30 +3,43 @@ package folder
 import (
 	"errors"
 	"strings"
+
+	"github.com/gofrs/uuid"
 )
 
 func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 	// Your code here...
 	allFolders := f.folders
-
 	modifiedFolders := []Folder{}
+	var destinationPath string = ""
+	var destinationOrgID uuid.UUID
 
 	if name == "" {
 		return []Folder{}, errors.New("empty name")
 	}
 
-	var destinationPath string = ""
+	if dst == "" {
+		return []Folder{}, errors.New("empty destination file")
+	}
 
 	for _, folder := range allFolders {
 		if folder.Name == dst {
 			destinationPath = folder.Paths
+			destinationOrgID = folder.OrgId
+			break
 		}
+	}
 
+	if destinationPath == "" {
+		return []Folder{}, errors.New("destination folder not found")
 	}
 
 	for _, folder := range allFolders {
 		if folder.Name == name && strings.Contains(destinationPath, folder.Paths) {
 			return []Folder{}, errors.New("cannot move a folder to child folder")
+		}
+		if folder.Name == name && folder.OrgId != destinationOrgID {
+			return []Folder{}, errors.New("cannot move a folder to different orgID")
 		}
 	}
 
