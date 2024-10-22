@@ -46,14 +46,14 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 			}
 		}
 
-		// This section modifies the path of the target folder
+		// Modify the path of the target folder
 		if folder.Name == name {
 			folder.Paths = destinationPath + "." + folder.Name
 
-			// This section modifies the path of the child folders of the target folder
+		// Modify the path of the child folders of the target folder
 		} else if strings.Contains(folder.Paths, name) {
 			indexOfParentFolderName := strings.Index(folder.Paths, name)                  // Find the index of the parent folder in the child folders path
-			folder.Paths = destinationPath + "." + folder.Paths[indexOfParentFolderName:] // Create new path with destination path as the beginning
+			folder.Paths = destinationPath + "." + folder.Paths[indexOfParentFolderName:] // Create new path with destination path as the prefix
 		}
 
 		modifiedFolders = append(modifiedFolders, folder)

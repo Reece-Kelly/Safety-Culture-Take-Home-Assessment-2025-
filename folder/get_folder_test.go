@@ -53,7 +53,7 @@ func Test_folder_GetFoldersByOrgID(t *testing.T) {
 			want:    []folder.Folder{},
 		},
 
-		// Test to check method works with
+		// Test to check method works with folders with different OrgIDs in input slice
 		{
 			name:    "Multiple OrgIDs in input slice",
 			orgID:   uuid.Must(uuid.FromString("c1556e17-b7c0-45a3-a6ae-9546248fb17a")),
