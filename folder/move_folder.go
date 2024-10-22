@@ -8,12 +8,6 @@ import (
 )
 
 func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
-	// Your code here...
-	allFolders := f.folders
-	modifiedFolders := []Folder{}
-	var destinationPath string = ""
-	var destinationOrgID uuid.UUID
-
 	if name == "" {
 		return []Folder{}, errors.New("empty name")
 	}
@@ -21,6 +15,11 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 	if dst == "" {
 		return []Folder{}, errors.New("empty destination file")
 	}
+
+	allFolders := f.folders
+
+	var destinationPath string = ""
+	var destinationOrgID uuid.UUID
 
 	for _, folder := range allFolders {
 		if folder.Name == dst {
@@ -34,24 +33,24 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 		return []Folder{}, errors.New("destination folder not found")
 	}
 
-	for _, folder := range allFolders {
-		if folder.Name == name && strings.Contains(destinationPath, folder.Paths) {
-			return []Folder{}, errors.New("cannot move a folder to child folder")
-		}
-		if folder.Name == name && folder.OrgId != destinationOrgID {
-			return []Folder{}, errors.New("cannot move a folder to different orgID")
-		}
-	}
-
-	var newPath string
+	modifiedFolders := []Folder{}
 
 	for _, folder := range allFolders {
+		if folder.Name == name {
+			if strings.Contains(destinationPath, folder.Paths) {
+				return []Folder{}, errors.New("cannot move a folder to child folder")
+			}
+
+			if folder.OrgId != destinationOrgID {
+				return []Folder{}, errors.New("cannot move a folder to different orgID")
+			}
+		}
+
 		// This section modifies the path of the target folder
 		if folder.Name == name {
-			newPath = destinationPath + "." + folder.Name // Not sure if this is the correct way to add strings together
-			folder.Paths = newPath
+			folder.Paths = destinationPath + "." + folder.Name
 
-			// This section modifies the path of the child folders of the parent folder
+			// This section modifies the path of the child folders of the target folder
 		} else if strings.Contains(folder.Paths, name) {
 			indexOfParentFolderName := strings.Index(folder.Paths, name)                  // Find the index of the parent folder in the child folders path
 			folder.Paths = destinationPath + "." + folder.Paths[indexOfParentFolderName:] // Create new path with destination path as the beginning
